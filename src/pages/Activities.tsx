@@ -286,10 +286,10 @@ const Activities = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-          <div>
+          <div className="[&_[role=listbox]]:!z-[100]">
             <Label>Arrondissement</Label>
             <Select onValueChange={(value) => setFilters({ ...filters, location: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Sélectionner un arrondissement" />
               </SelectTrigger>
               <SelectContent>
@@ -302,10 +302,10 @@ const Activities = () => {
             </Select>
           </div>
 
-          <div>
+          <div className="[&_[role=listbox]]:!z-[100]">
             <Label>Niveau</Label>
             <Select onValueChange={(value) => setFilters({ ...filters, level: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Sélectionner un niveau" />
               </SelectTrigger>
               <SelectContent>
@@ -317,10 +317,10 @@ const Activities = () => {
             </Select>
           </div>
 
-          <div>
+          <div className="[&_[role=listbox]]:!z-[100]">
             <Label>Jour de la semaine</Label>
             <Select onValueChange={(value) => setFilters({ ...filters, dayOfWeek: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Sélectionner un jour" />
               </SelectTrigger>
               <SelectContent>
@@ -344,24 +344,30 @@ const Activities = () => {
             />
           </div>
 
-          <div>
+          <div className="[&_[role=listbox]]:!z-[100]">
             <Label>Horaire</Label>
             <Select onValueChange={(value) => setFilters({ ...filters, time: value })}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Sélectionner un horaire" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from(new Set(activities.map((a) => a.time))).map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
-                  </SelectItem>
-                ))}
+                {Array.from(new Set(activities.map((a) => a.time)))
+                  .sort((a, b) => {
+                    const timeA = parseInt(a.split(':')[0]);
+                    const timeB = parseInt(b.split(':')[0]);
+                    return timeA - timeB;
+                  })
+                  .map((time) => (
+                    <SelectItem key={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-0">
           {filteredActivities.map((activity) => (
             <ActivityCard
               key={activity.title}

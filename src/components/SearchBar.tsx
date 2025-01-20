@@ -1,70 +1,41 @@
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
 }
 
-export const SearchBar = ({ onSearch }: SearchBarProps) => {
-  const navigate = useNavigate();
+export function SearchBar({ onSearch }: SearchBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const searchParam = params.get("search");
-    if (searchParam) {
-      setSearchQuery(searchParam);
-      onSearch?.(searchParam);
-    }
-  }, [onSearch]);
-
-  const normalizeSearch = (query: string) => {
-    // Normalise et sépare les mots
-    const words = query
-      .toLowerCase()
-      .replace(/\s+de\s+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .split(' ')
-      .filter(word => word.length > 0);
-    
-    // Trie les mots pour avoir un ordre cohérent
-    words.sort();
-    
-    // Rejoint les mots
-    return words.join(' ');
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      const normalizedQuery = normalizeSearch(searchQuery);
-      if (onSearch) {
-        onSearch(normalizedQuery);
+      if (location.pathname === "/") {
+        // Sur la page d'accueil, rediriger vers la page des activités
+        navigate(`/activities?search=${encodeURIComponent(searchQuery.trim())}`);
       } else {
-        navigate(`/activities?search=${encodeURIComponent(normalizedQuery)}`);
+        // Sur la page des activités, mettre à jour la recherche
+        onSearch?.(searchQuery.trim());
       }
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-      <Input
+    <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
+      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <Search className="h-5 w-5 text-gray-400" />
+      </div>
+      <input
         type="text"
-        placeholder="Rechercher une activité à Marseille..."
-        className="pl-10 h-12 rounded-full border-2 border-gray-200 focus:border-primary"
         value={searchQuery}
-        onChange={(e) => {
-          const value = e.target.value;
-          setSearchQuery(value);
-          if (onSearch && value.length >= 2) {
-            onSearch(normalizeSearch(value));
-          }
-        }}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Rechercher une activité à Marseille..."
+        className="block w-full pl-10 pr-3 py-4 border border-gray-200 rounded-lg bg-white shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#102A43] focus:border-[#102A43]"
       />
     </form>
   );
-};
+}

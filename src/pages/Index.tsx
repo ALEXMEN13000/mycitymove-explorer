@@ -1,7 +1,9 @@
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryGrid } from "@/components/CategoryGrid";
-import { Footer } from "@/components/Footer";
+import { PopularActivities } from "@/components/PopularActivities";
+import { PopularClubs } from "@/components/PopularClubs";
 
 const Index = () => {
   return (
@@ -18,6 +20,8 @@ const Index = () => {
           <SearchBar />
         </div>
         <CategoryGrid />
+        <PopularClubs />
+        <PopularActivities />
       </main>
       <Footer />
     </div>
