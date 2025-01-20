@@ -31,21 +31,21 @@ export function CategoryGrid() {
 
   return (
     <div>
-      <div className="mb-12">
+      <div className="mb-12 text-center max-w-3xl mx-auto">
         <h2 className="text-3xl font-bold mb-4 text-[#102A43]">
-          Découvrez vos activités à CLUBCENTER
+          Découvrez vos activités préférées sur CLUBCENTER
         </h2>
         <p className="text-xl text-gray-600">
           Explorez notre sélection d'activités variées et trouvez celle qui vous correspond. Sport, musique, bien-être ou art, il y en a pour tous les goûts !
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 max-w-5xl mx-auto">
         {categories.map((category) => (
           <button
             key={category.id}
             onClick={() => setSelectedCategory(category.id)}
-            className="bg-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-left"
+            className="bg-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300 text-left flex flex-col items-center justify-center"
           >
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 mb-6 flex items-center justify-center">

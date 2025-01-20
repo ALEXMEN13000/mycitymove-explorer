@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -178,28 +178,28 @@ export function LoginForm({ type = 'user', onSuccess, redirectTo = type === 'clu
             </button>
             <div className="space-x-1">
               <span>Pas encore de compte ?</span>
-              <a
-                href={type === 'club' ? '/club/register' : '/register'}
+              <Link
+                to={type === 'club' ? '/club/register' : '/register'}
                 className="text-blue-600 hover:underline"
               >
                 S'inscrire
-              </a>
+              </Link>
             </div>
             {type === 'user' && (
-              <a
-                href="/club/login"
+              <Link
+                to="/club/login"
                 className="block text-gray-600 hover:underline"
               >
                 Vous êtes un club ? Connexion club
-              </a>
+              </Link>
             )}
             {type === 'club' && (
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="block text-gray-600 hover:underline"
               >
                 Vous êtes un utilisateur ? Connexion utilisateur
-              </a>
+              </Link>
             )}
           </div>
         </CardFooter>

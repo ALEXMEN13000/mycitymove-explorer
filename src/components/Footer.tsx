@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Facebook, Instagram, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function Footer() {
@@ -12,17 +12,34 @@ export function Footer() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span>📧</span>
-                <a href="mailto:contact@clubcenter.fr" className="hover:text-gray-300">
-                  contact@clubcenter.fr
+                <a 
+                  href="mailto:contact@club-center.com" 
+                  className="hover:text-gray-300 hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  contact@club-center.com
                 </a>
               </div>
               <div className="flex items-center gap-2">
                 <span>📞</span>
-                <span>01 23 45 67 89</span>
+                <a 
+                  href="tel:+33624258373" 
+                  className="hover:text-gray-300 hover:underline"
+                >
+                  06 24 25 83 73
+                </a>
               </div>
               <div className="flex items-center gap-2">
                 <span>📍</span>
-                <span>123 rue des Sports, 75000 Paris</span>
+                <a 
+                  href="https://www.google.com/maps/place/19+Rue+Henri+Barbusse,+13001+Marseille" 
+                  className="hover:text-gray-300 hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  19 rue Henri Barbusse, 13001 Marseille
+                </a>
               </div>
             </div>
           </div>
@@ -33,7 +50,7 @@ export function Footer() {
             <div className="space-y-2">
               <p>Lundi - Vendredi : 9h - 20h</p>
               <p>Samedi : 10h - 18h</p>
-              <p>Dimanche : Fermé</p>
+              <p>Dimanche : 10h - 18h</p>
             </div>
           </div>
 
@@ -44,11 +61,11 @@ export function Footer() {
               <a href="#" className="hover:text-gray-300">
                 <Facebook size={24} />
               </a>
-              <a href="#" className="hover:text-gray-300">
+              <a href="https://www.instagram.com/clubcenter.marseille/" className="hover:text-gray-300" target="_blank" rel="noopener noreferrer">
                 <Instagram size={24} />
               </a>
               <a href="#" className="hover:text-gray-300">
-                <Twitter size={24} />
+                <X size={24} />
               </a>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { auth } from '@/services/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -119,20 +119,20 @@ export function RegisterForm({ type }: RegisterFormProps) {
             )}
           </Button>
           <div className="text-center text-sm space-y-2">
-            <a 
-              href={type === 'user' ? '/login' : '/club/login'} 
+            <Link 
+              to={type === 'user' ? '/login' : '/club/login'} 
               className="text-blue-600 hover:underline block"
             >
               Déjà un compte ? Se connecter
-            </a>
-            <a 
-              href={type === 'user' ? '/club/register' : '/register'} 
+            </Link>
+            <Link 
+              to={type === 'user' ? '/club/register' : '/register'} 
               className="text-gray-600 hover:underline block"
             >
               {type === 'user' 
                 ? 'Vous êtes un club ? Inscription club'
                 : 'Vous êtes un utilisateur ? Inscription utilisateur'}
-            </a>
+            </Link>
           </div>
         </CardFooter>
       </form>

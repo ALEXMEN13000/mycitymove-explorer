@@ -7,106 +7,18 @@
     <meta name="description" content="CLUBCENTER" />
     <meta name="author" content="Lovable" />
     <meta property="og:image" content="/og-image.png" />
-    <script type="module" crossorigin src="./assets/index-DsperILF.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DTBag7xi.css">
+    <script type="module" crossorigin src="/mycitymove-explorer3/assets/index-Dnja1e0J.js"></script>
+    <link rel="stylesheet" crossorigin href="/mycitymove-explorer3/assets/index-K5-BlRn9.css">
   </head>
 
   <body>
-    <div id="root"></div>
-    <div>
-      <h2>Connexion Club</h2>
-      <input type="email" id="clubEmail" placeholder="Email du club">
-      <input type="password" id="clubPassword" placeholder="Mot de passe">
-      <button onclick="signIn(document.getElementById('clubEmail').value, document.getElementById('clubPassword').value, true)">
-        Connexion Club
-      </button>
+    <div id="root">
+      <div class="search-container">
+        <form action="/search" method="get">
+          <input type="text" placeholder="Rechercher..." name="q">
+          <button type="submit">Rechercher</button>
+        </form>
+      </div>
     </div>
-
-    <div>
-      <h2>Inscription Club</h2>
-      <input type="text" id="newClubName" placeholder="Nom du club">
-      <input type="email" id="newClubEmail" placeholder="Email du club">
-      <input type="password" id="newClubPassword" placeholder="Mot de passe">
-      <button onclick="signUpClub(
-        document.getElementById('newClubEmail').value,
-        document.getElementById('newClubPassword').value,
-        document.getElementById('newClubName').value
-      )">
-        Créer un compte club
-      </button>
-    </div>
-    <script>
-      // Ajouter une fonction pour l'inscription des clubs
-      async function signUpClub(email, password, clubName) {
-        try {
-          // Créer l'authentification
-          const { data: authData, error: authError } = await supabase.auth.signUp({
-            email,
-            password,
-          })
-
-          if (authError) throw authError
-
-          // Ajouter les informations du club dans la table clubs
-          const { error: clubError } = await supabase
-            .from('clubs')
-            .insert([
-              {
-                id: authData.user.id,
-                name: clubName,
-                email: email,
-              }
-            ])
-
-          if (clubError) throw clubError
-
-          alert('Club créé avec succès!')
-        } catch (error) {
-          alert('Erreur lors de la création du club: ' + error.message)
-        }
-      }
-
-      // Modifier la fonction de connexion pour vérifier le type de compte
-      async function signIn(email, password, isClub = false) {
-        try {
-          const { data: { user }, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          })
-
-          if (error) throw error
-
-          if (isClub) {
-            // Vérifier si l'utilisateur existe dans la table clubs
-            const { data: clubData, error: clubError } = await supabase
-              .from('clubs')
-              .select('*')
-              .eq('id', user.id)
-              .single()
-
-            if (clubError || !clubData) {
-              await supabase.auth.signOut()
-              throw new Error('Ce compte n\'est pas un club')
-            }
-          } else {
-            // Vérifier si l'utilisateur n'est pas un club
-            const { data: clubData } = await supabase
-              .from('clubs')
-              .select('*')
-              .eq('id', user.id)
-              .single()
-
-            if (clubData) {
-              await supabase.auth.signOut()
-              throw new Error('Ce compte est un club, veuillez utiliser la connexion club')
-            }
-          }
-
-          alert('Connexion réussie!')
-        } catch (error) {
-          alert('Erreur de connexion: ' + error.message)
-        }
-      }
-    </script>
   </body>
 </html>

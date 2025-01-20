@@ -1,344 +1,391 @@
-import { useParams } from "react-router-dom";
-import { Header } from "@/components/Header";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
-import { MapPin, Clock, Euro } from "lucide-react";
-import { useState } from "react";
+import { useParams, Link } from 'react-router-dom';
+import { Star, MapPin, Clock, Euro, Calendar, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
 
-// Exemple de données (à remplacer par des données réelles)
-const activityDetails = {
-  "cours-de-tennis": {
-    title: "Cours de Tennis",
-    category: "Sport",
-    description: "Le Tennis Club Marseille vous accueille dans un cadre exceptionnel pour apprendre ou perfectionner votre tennis. Nos courts sont entretenus quotidiennement et nos professeurs sont diplômés d'État.",
-    imageUrl: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6",
-    location: {
-      name: "Tennis Club Marseille",
-      address: "82 Boulevard Michelet, 13008 Marseille"
-    },
-    courses: [
-      { name: "Initiation", level: "Débutant", duration: "1h", maxParticipants: 6 },
-      { name: "Perfectionnement", level: "Intermédiaire", duration: "1h30", maxParticipants: 4 },
-      { name: "Compétition", level: "Avancé", duration: "2h", maxParticipants: 4 }
-    ],
-    schedule: {
-      monday: "9h - 21h",
-      tuesday: "9h - 21h",
-      wednesday: "9h - 21h",
-      thursday: "9h - 21h",
-      friday: "9h - 21h",
-      saturday: "9h - 18h",
-      sunday: "9h - 12h"
-    },
-    pricing: {
-      session: "25€ / séance",
-      monthly: "80€ / mois",
-      quarterly: "220€ / trimestre",
-      yearly: "750€ / an",
-      benefits: [
-        "Accès aux courts",
-        "Prêt de matériel pour débutants",
-        "Participation aux tournois internes",
-        "Accès aux vestiaires"
-      ]
-    }
-  },
-  "cours-de-piano": {
-    title: "Cours de Piano",
-    category: "Musique",
-    description: "Le Conservatoire de Marseille propose des cours de piano pour tous les niveaux. Nos professeurs expérimentés vous accompagnent dans votre apprentissage musical avec passion et professionnalisme.",
-    imageUrl: "https://images.unsplash.com/photo-1552422535-c45813c61732",
-    location: {
-      name: "Conservatoire National à Rayonnement Régional",
-      address: "2 Place Auguste Carli, 13001 Marseille"
-    },
-    courses: [
-      { name: "Éveil musical", level: "Débutant", duration: "45min", maxParticipants: 1 },
-      { name: "Formation musicale", level: "Intermédiaire", duration: "1h", maxParticipants: 1 },
-      { name: "Perfectionnement", level: "Avancé", duration: "1h30", maxParticipants: 1 }
-    ],
-    schedule: {
-      monday: "10h - 20h",
-      tuesday: "10h - 20h",
-      wednesday: "9h - 21h",
-      thursday: "10h - 20h",
-      friday: "10h - 20h",
-      saturday: "9h - 17h",
-      sunday: "Fermé"
-    },
-    pricing: {
-      session: "35€ / séance",
-      monthly: "120€ / mois",
-      quarterly: "330€ / trimestre",
-      yearly: "1100€ / an",
-      benefits: [
-        "Cours individuels personnalisés",
-        "Accès aux pianos d'étude",
-        "Participation aux auditions",
-        "Suivi pédagogique personnalisé",
-        "Préparation aux examens"
-      ]
-    }
-  },
-  "cours-de-theatre": {
-    title: "Cours de Théâtre",
-    category: "Art",
-    description: "Le Théâtre National de Marseille vous ouvre ses portes pour découvrir l'art dramatique. Des cours adaptés à tous les niveaux, dispensés par des comédiens professionnels dans un cadre historique exceptionnel.",
-    imageUrl: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf",
-    location: {
-      name: "La Criée - Théâtre National de Marseille",
-      address: "30 Quai de Rive Neuve, 13007 Marseille"
-    },
-    courses: [
-      { name: "Découverte", level: "Débutant", duration: "2h", maxParticipants: 12 },
-      { name: "Interprétation", level: "Intermédiaire", duration: "3h", maxParticipants: 10 },
-      { name: "Master class", level: "Avancé", duration: "4h", maxParticipants: 8 }
-    ],
-    schedule: {
-      monday: "14h - 22h",
-      tuesday: "14h - 22h",
-      wednesday: "14h - 22h",
-      thursday: "14h - 22h",
-      friday: "14h - 22h",
-      saturday: "10h - 18h",
-      sunday: "Fermé"
-    },
-    pricing: {
-      session: "30€ / séance",
-      monthly: "100€ / mois",
-      quarterly: "270€ / trimestre",
-      yearly: "900€ / an",
-      benefits: [
-        "Accès aux répétitions",
-        "Participation aux spectacles de fin d'année",
-        "Masterclass avec des artistes invités",
-        "Accès à la bibliothèque théâtrale",
-        "Réductions sur les spectacles du théâtre"
-      ]
-    }
-  },
-  "seance-de-yoga": {
+// Base de données exemple (à remplacer par une vraie API)
+const activitiesData = {
+  'seance-de-yoga': {
     title: "Séance de Yoga",
+    description: "Découvrez notre séance de yoga adaptée à tous les niveaux. Notre instructeur expérimenté vous guidera à travers différentes postures et exercices de respiration pour améliorer votre bien-être physique et mental.",
     category: "Bien-être",
-    description: "Le Studio Zen Marseille est un havre de paix dédié à la pratique du yoga. Notre studio lumineux de 150m² offre un cadre idéal pour votre pratique, avec des équipements haut de gamme et une équipe de professeurs certifiés et passionnés. Nous proposons différents styles de yoga pour répondre à tous les besoins et tous les niveaux.",
-    imageUrl: "https://images.unsplash.com/photo-1599447421416-3414500d18a5",
-    location: {
-      name: "Studio Zen Marseille",
-      address: "45 Rue Paradis, 13006 Marseille"
-    },
-    courses: [
-      { name: "Hatha Yoga", level: "Tous niveaux", duration: "1h", maxParticipants: 15, description: "Yoga traditionnel équilibrant corps et esprit" },
-      { name: "Vinyasa Flow", level: "Intermédiaire", duration: "1h15", maxParticipants: 12, description: "Yoga dynamique synchronisé avec la respiration" },
-      { name: "Yin Yoga", level: "Tous niveaux", duration: "1h30", maxParticipants: 15, description: "Yoga doux et méditatif" },
-      { name: "Yoga Prénatal", level: "Spécialisé", duration: "1h", maxParticipants: 8, description: "Adapté aux futures mamans" }
-    ],
+    rating: 4.5,
+    reviewsCount: 12,
+    price: "20€ / séance",
+    location: "Studio Zen, 19 rue Henri Barbusse, 13001 Marseille",
     schedule: {
-      monday: "7h - 21h",
-      tuesday: "7h - 21h",
-      wednesday: "7h - 21h",
-      thursday: "7h - 21h",
-      friday: "7h - 20h",
-      saturday: "9h - 18h",
-      sunday: "9h - 12h"
+      monday: ["10:00", "15:00", "18:00"],
+      wednesday: ["9:00", "14:00", "17:00"],
+      friday: ["11:00", "16:00", "19:00"]
     },
-    pricing: {
-      session: "20€ / séance",
-      monthly: "90€ / mois (accès illimité)",
-      quarterly: "240€ / trimestre",
-      yearly: "800€ / an",
-      benefits: [
-        "Accès illimité à tous les cours collectifs",
-        "Prêt de tapis et accessoires de qualité",
-        "Vestiaires spacieux avec douches",
-        "Espace détente avec thés bio offerts",
-        "Séance d'essai offerte",
-        "Parking gratuit",
-        "Réservation en ligne"
-      ]
-    }
+    instructor: "Sarah M.",
+    clubName: "Studio Zen",
+    clubLogo: "https://images.unsplash.com/photo-1545389336-cf090694435e?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1599447421416-3414500d18a5",
+      "https://images.unsplash.com/photo-1588286840104-8957b019727f",
+      "https://images.unsplash.com/photo-1599447421275-6a0b5b651b4c"
+    ]
   },
-  "cours-de-peinture": {
-    title: "Cours de Peinture",
-    category: "Art",
-    description: "L'Atelier des Artistes de Marseille est un espace créatif de 200m² baigné de lumière naturelle. Notre atelier accueille artistes débutants et confirmés dans une ambiance chaleureuse et inspirante. Nos professeurs, tous artistes professionnels, vous guident dans l'apprentissage de différentes techniques picturales.",
-    imageUrl: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b",
-    location: {
-      name: "Atelier des Artistes",
-      address: "15 Rue Sainte, 13001 Marseille"
-    },
-    courses: [
-      { name: "Initiation Techniques Mixtes", level: "Débutant", duration: "2h", maxParticipants: 8, description: "Découverte des bases du dessin et de la peinture" },
-      { name: "Peinture à l'Huile", level: "Intermédiaire", duration: "3h", maxParticipants: 6, description: "Techniques classiques de la peinture à l'huile" },
-      { name: "Aquarelle", level: "Tous niveaux", duration: "2h", maxParticipants: 8, description: "Maîtrise des techniques de l'aquarelle" },
-      { name: "Acrylique Contemporain", level: "Avancé", duration: "3h", maxParticipants: 6, description: "Exploration de l'art contemporain" }
-    ],
+  'cours-de-tennis': {
+    title: "Cours de Tennis",
+    description: "Apprenez ou perfectionnez votre tennis avec nos cours adaptés à votre niveau. Nos coachs professionnels vous accompagnent dans votre progression avec des exercices personnalisés et des conseils techniques.",
+    category: "Sport",
+    rating: 4.8,
+    reviewsCount: 8,
+    price: "25€ / heure",
+    location: "Tennis Club Marseille, 123 avenue du Prado, 13008 Marseille",
     schedule: {
-      monday: "10h - 19h",
-      tuesday: "10h - 19h",
-      wednesday: "10h - 19h",
-      thursday: "10h - 19h",
-      friday: "10h - 19h",
-      saturday: "10h - 17h",
-      sunday: "Fermé"
+      tuesday: ["9:00", "14:00", "17:00"],
+      thursday: ["10:00", "15:00", "18:00"],
+      saturday: ["9:00", "11:00", "14:00"]
     },
-    pricing: {
-      session: "35€ / séance",
-      monthly: "120€ / mois",
-      quarterly: "330€ / trimestre",
-      yearly: "1100€ / an",
-      benefits: [
-        "Matériel de base fourni",
-        "Chevalet individuel",
-        "Espace de stockage pour vos œuvres",
-        "Exposition annuelle des travaux d'élèves",
-        "Sorties culturelles organisées",
-        "Accès à la bibliothèque d'art",
-        "Participation aux workshops mensuels"
-      ]
-    }
+    instructor: "Thomas B.",
+    clubName: "Tennis Club Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6",
+      "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0",
+      "https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff"
+    ]
+  },
+  'cours-de-theatre': {
+    title: "Cours de Théâtre",
+    description: "Développez votre créativité et votre confiance en vous avec nos cours de théâtre. Dans une ambiance conviviale, vous explorerez différentes techniques d'expression et travaillerez sur des textes variés.",
+    category: "Art",
+    rating: 4.7,
+    reviewsCount: 15,
+    price: "30€ / séance",
+    location: "Théâtre National, 54 rue de la République, 13002 Marseille",
+    schedule: {
+      monday: ["14:00", "18:00"],
+      wednesday: ["15:00", "19:00"],
+      saturday: ["10:00", "14:00"]
+    },
+    instructor: "Marc L.",
+    clubName: "Théâtre National",
+    clubLogo: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf",
+      "https://images.unsplash.com/photo-1611088136383-06d0d6b85765",
+      "https://images.unsplash.com/photo-1585699324551-f6c309eedeca"
+    ]
+  },
+  'cours-de-piano': {
+    title: "Cours de Piano",
+    description: "Découvrez l'art du piano dans notre conservatoire renommé. Nos professeurs expérimentés vous guideront dans votre apprentissage musical, que vous soyez débutant ou avancé.",
+    category: "Musique",
+    rating: 4.6,
+    reviewsCount: 10,
+    price: "35€ / séance",
+    location: "Conservatoire de Marseille, 2 Place Auguste Carli, 13001 Marseille",
+    schedule: {
+      monday: ["14:00", "16:00", "18:00"],
+      wednesday: ["10:00", "14:00", "16:00"],
+      friday: ["14:00", "16:00", "18:00"]
+    },
+    instructor: "Claire D.",
+    clubName: "Conservatoire de Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1552422535-c45813c61732",
+      "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0",
+      "https://images.unsplash.com/photo-1571974599782-87624638275e"
+    ]
+  },
+  'cours-de-natation': {
+    title: "Cours de Natation",
+    description: "Apprenez à nager ou perfectionnez votre technique avec nos maîtres-nageurs qualifiés. Cours adaptés à tous les niveaux dans une piscine moderne et sécurisée.",
+    category: "Sport",
+    rating: 4.5,
+    reviewsCount: 18,
+    price: "15€ / séance",
+    location: "Piscine Municipale Marseille, 15 Boulevard Louis Armand, 13008 Marseille",
+    schedule: {
+      monday: ["10:00", "14:00", "17:00"],
+      wednesday: ["10:00", "14:00", "17:00"],
+      saturday: ["9:00", "11:00", "14:00"]
+    },
+    instructor: "Nicolas P.",
+    clubName: "Piscine Municipale",
+    clubLogo: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600965962361-9035dbfd1c50",
+      "https://images.unsplash.com/photo-1622737133809-d95047b9e673",
+      "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7"
+    ]
+  },
+  'cours-de-guitare': {
+    title: "Cours de Guitare",
+    description: "Initiez-vous à la guitare ou perfectionnez votre jeu avec nos cours personnalisés. Du classique au rock, explorez différents styles musicaux dans une ambiance décontractée.",
+    category: "Musique",
+    rating: 4.4,
+    reviewsCount: 14,
+    price: "30€ / séance",
+    location: "École de Musique Marseille, 45 Rue Saint-Pierre, 13005 Marseille",
+    schedule: {
+      tuesday: ["14:00", "16:00", "18:00"],
+      thursday: ["14:00", "16:00", "18:00"],
+      saturday: ["10:00", "14:00"]
+    },
+    instructor: "Antoine R.",
+    clubName: "École de Musique Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1510915361894-db8b60106cb1",
+      "https://images.unsplash.com/photo-1525201548942-d8732f6617a0",
+      "https://images.unsplash.com/photo-1556449895-a33c9dba33dd"
+    ]
+  },
+  'cours-de-danse-classique': {
+    title: "Cours de Danse Classique",
+    description: "Découvrez l'élégance de la danse classique dans notre studio professionnel. Nos professeurs expérimentés vous accompagnent dans votre progression technique et artistique.",
+    category: "Danse",
+    rating: 4.8,
+    reviewsCount: 20,
+    price: "28€ / séance",
+    location: "Studio de Danse Marseille, 25 Rue Paradis, 13001 Marseille",
+    schedule: {
+      tuesday: ["14:00", "16:00", "18:00"],
+      thursday: ["14:00", "16:00", "18:00"],
+      saturday: ["10:00", "14:00"]
+    },
+    instructor: "Marie P.",
+    clubName: "Studio de Danse Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1518834107812-67b0b7c58434",
+      "https://images.unsplash.com/photo-1499720843949-d9e6f318dca0",
+      "https://images.unsplash.com/photo-1547153760-18fc86324498"
+    ]
+  },
+  'atelier-peinture': {
+    title: "Atelier Peinture",
+    description: "Exprimez votre créativité dans notre atelier de peinture. Du dessin aux techniques mixtes, développez votre style personnel avec nos artistes professionnels.",
+    category: "Art",
+    rating: 4.6,
+    reviewsCount: 16,
+    price: "40€ / séance",
+    location: "Atelier des Arts Marseille, 30 Rue des Arts, 13001 Marseille",
+    schedule: {
+      wednesday: ["14:00", "16:00", "18:00"],
+      friday: ["14:00", "16:00", "18:00"],
+      saturday: ["10:00", "14:00"]
+    },
+    instructor: "Sophie L.",
+    clubName: "Atelier des Arts Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b",
+      "https://images.unsplash.com/photo-1579762715118-a6f1d4b934f1",
+      "https://images.unsplash.com/photo-1571115764595-644a1f56a55c"
+    ]
+  },
+  'cours-de-boxe': {
+    title: "Cours de Boxe",
+    description: "Découvrez la boxe dans un environnement dynamique et sécurisé. Améliorez votre condition physique et apprenez les techniques de self-défense avec nos coachs expérimentés.",
+    category: "Sport",
+    rating: 4.7,
+    reviewsCount: 22,
+    price: "22€ / séance",
+    location: "Club de Boxe Marseille, 55 Boulevard Baille, 13006 Marseille",
+    schedule: {
+      monday: ["18:00", "19:30"],
+      wednesday: ["18:00", "19:30"],
+      friday: ["18:00", "19:30"]
+    },
+    instructor: "David M.",
+    clubName: "Club de Boxe Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed",
+      "https://images.unsplash.com/photo-1517438322307-e67111335449",
+      "https://images.unsplash.com/photo-1622599511051-16f55a1234d0"
+    ]
+  },
+  'meditation-guidee': {
+    title: "Méditation Guidée",
+    description: "Trouvez votre équilibre intérieur avec nos séances de méditation guidée. Dans un cadre apaisant, apprenez des techniques de respiration et de pleine conscience.",
+    category: "Bien-être",
+    rating: 4.9,
+    reviewsCount: 25,
+    price: "15€ / séance",
+    location: "Centre Mindfulness Marseille, 10 Rue Dragon, 13006 Marseille",
+    schedule: {
+      tuesday: ["8:00", "12:00", "18:00"],
+      thursday: ["8:00", "12:00", "18:00"],
+      sunday: ["9:00", "11:00"]
+    },
+    instructor: "Laura B.",
+    clubName: "Centre Mindfulness Marseille",
+    clubLogo: "https://images.unsplash.com/photo-1528319725582-ddc096101511?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
+      "https://images.unsplash.com/photo-1593811167562-9cef47bfc4a7",
+      "https://images.unsplash.com/photo-1545205597-3d9d02c29597"
+    ]
+  },
+  'cours-de-football': {
+    title: "Cours de Football",
+    description: "Développez vos compétences footballistiques dans l'enceinte mythique du Stade Vélodrome. Nos entraîneurs qualifiés vous aident à progresser techniquement et tactiquement.",
+    category: "Sport",
+    rating: 4.8,
+    reviewsCount: 30,
+    price: "18€ / séance",
+    location: "Stade Vélodrome, Boulevard Michelet, 13008 Marseille",
+    schedule: {
+      wednesday: ["14:00", "16:00", "18:00"],
+      saturday: ["10:00", "14:00", "16:00"]
+    },
+    instructor: "Julien T.",
+    clubName: "Stade Vélodrome",
+    clubLogo: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=100&h=100&fit=crop&auto=format&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
+      "https://images.unsplash.com/photo-1543326727-cf6c39e8f84c",
+      "https://images.unsplash.com/photo-1600679472829-3044539ce8ed"
+    ]
   }
 };
 
-export const ActivityDetails = () => {
+export function ActivityDetails() {
   const { activityId } = useParams();
-  const activity = activityDetails[activityId as keyof typeof activityDetails];
+  const [activity, setActivity] = useState<any>(null);
+  const [selectedImage, setSelectedImage] = useState(0);
 
-  if (!activity) return <div>Activité non trouvée</div>;
+  useEffect(() => {
+    if (activityId && activityId in activitiesData) {
+      setActivity(activitiesData[activityId as keyof typeof activitiesData]);
+    }
+  }, [activityId]);
+
+  if (!activity) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-2">Activité non trouvée</h1>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto px-4 pt-24 pb-12">
-        <div className="aspect-[21/9] relative rounded-xl overflow-hidden mb-8">
+    <div className="container mx-auto px-4 py-8">
+      {/* En-tête */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">{activity.title}</h1>
+        <div className="flex items-center gap-4 text-gray-600">
+          <div className="flex items-center gap-1">
+            <Star className="h-5 w-5 fill-yellow-400 stroke-yellow-400" />
+            <span className="font-semibold">{activity.rating}</span>
+            <Link to={`/activity/${activityId}/reviews`} className="text-blue-600 hover:underline">
+              ({activity.reviewsCount} avis)
+            </Link>
+          </div>
+          <span>•</span>
+          <span>{activity.category}</span>
+        </div>
+      </div>
+
+      {/* Galerie d'images */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="md:col-span-2">
           <img
-            src={activity.imageUrl}
+            src={activity.images[selectedImage]}
             alt={activity.title}
-            className="w-full h-full object-cover"
+            className="w-full h-96 object-cover rounded-lg"
           />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-            <h1 className="text-4xl font-bold mb-2">{activity.title}</h1>
-            <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
-              <span>{activity.location.name}</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
+          {activity.images.map((image: string, index: number) => (
+            index !== selectedImage && (
+              <img
+                key={image}
+                src={image}
+                alt={`${activity.title} ${index + 1}`}
+                className="w-full h-44 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => setSelectedImage(index)}
+              />
+            )
+          ))}
+        </div>
+      </div>
+
+      {/* Informations principales */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="md:col-span-2 space-y-6">
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Description</h2>
+            <p className="text-gray-600">{activity.description}</p>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-semibold mb-4">Horaires</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {Object.entries(activity.schedule).map(([day, times]) => (
+                <div key={day} className="bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-semibold capitalize mb-2">{day}</h3>
+                  <ul className="space-y-1">
+                    {(times as string[]).map((time) => (
+                      <li key={time} className="text-gray-600">{time}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <Tabs defaultValue="description" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="description">Description</TabsTrigger>
-            <TabsTrigger value="courses">Cours</TabsTrigger>
-            <TabsTrigger value="schedule">Horaires</TabsTrigger>
-            <TabsTrigger value="pricing">Tarifs</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="description">
-            <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-4">À propos du club</h2>
-              <p className="text-gray-600">{activity.description}</p>
-              
-              <div className="mt-8">
-                <h3 className="text-xl font-semibold mb-4">Localisation</h3>
-                <div className="bg-gray-50 rounded-lg p-6">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-primary mt-1" />
-                    <div>
-                      <h4 className="font-semibold">{activity.location.name}</h4>
-                      <p className="text-gray-600">{activity.location.address}</p>
-                    </div>
-                  </div>
-                </div>
+        {/* Sidebar */}
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Euro className="h-5 w-5 text-gray-400" />
+                <span className="text-xl font-semibold">{activity.price}</span>
               </div>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="courses">
-            <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Nos cours</h2>
-              <div className="grid gap-6">
-                {activity.courses.map((course) => (
-                  <div key={course.name} className="border rounded-lg p-6">
-                    <h3 className="text-xl font-semibold mb-3">{course.name}</h3>
-                    {course.description && (
-                      <p className="text-gray-600 mb-4">{course.description}</p>
-                    )}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">Niveau :</span>
-                        <span>{course.level}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">Durée :</span>
-                        <span>{course.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">Participants max :</span>
-                        <span>{course.maxParticipants}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-start gap-2">
+                <MapPin className="h-5 w-5 text-gray-400 mt-1" />
+                <span>{activity.location}</span>
               </div>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="schedule">
-            <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Horaires d'ouverture</h2>
-              <div className="grid gap-4">
-                {Object.entries(activity.schedule).map(([day, hours]) => (
-                  <div key={day} className="flex justify-between items-center border-b py-2">
-                    <span className="capitalize">{day}</span>
-                    <span className="text-gray-600">{hours}</span>
-                  </div>
-                ))}
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-gray-400" />
+                <span>Voir les horaires ci-contre</span>
               </div>
-            </Card>
-          </TabsContent>
+              <Button className="w-full">
+                Réserver maintenant
+              </Button>
+            </div>
+          </div>
 
-          <TabsContent value="pricing">
-            <Card className="p-6">
-              <h2 className="text-2xl font-bold mb-6">Tarifs</h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Formules</h3>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center border-b py-2">
-                      <span>À la séance</span>
-                      <span className="font-semibold">{activity.pricing.session}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b py-2">
-                      <span>Abonnement mensuel</span>
-                      <span className="font-semibold">{activity.pricing.monthly}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b py-2">
-                      <span>Abonnement trimestriel</span>
-                      <span className="font-semibold">{activity.pricing.quarterly}</span>
-                    </div>
-                    <div className="flex justify-between items-center border-b py-2">
-                      <span>Abonnement annuel</span>
-                      <span className="font-semibold">{activity.pricing.yearly}</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Ce qui est inclus</h3>
-                  <ul className="space-y-2">
-                    {activity.pricing.benefits.map((benefit) => (
-                      <li key={benefit} className="flex items-center gap-2 text-gray-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                        {benefit}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h3 className="font-semibold mb-4">À propos du club</h3>
+            <div className="flex items-center gap-4">
+              <img
+                src={activity.clubLogo}
+                alt={activity.clubName}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div>
+                <p className="font-semibold">{activity.clubName}</p>
+                <p className="text-sm text-gray-600">Instructeur: {activity.instructor}</p>
               </div>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </main>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section des avis */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold">Avis</h2>
+          <Link 
+            to={`/activity/${activityId}/reviews`}
+            className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
+          >
+            Voir tous les avis
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
     </div>
   );
-}; 
+} 
