@@ -1,5 +1,7 @@
-import { Facebook, Instagram, X } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { XLogo } from "./icons/XLogo";
+import { TikTokLogo } from "./icons/TikTokLogo";
 
 export function Footer() {
   return (
@@ -58,14 +60,45 @@ export function Footer() {
           <div>
             <h3 className="text-xl font-semibold mb-4">Suivez-nous</h3>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-gray-300">
+              <a 
+                href="https://www.facebook.com/r.php?locale=fr_FR" 
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Facebook size={24} />
               </a>
-              <a href="https://www.instagram.com/clubcenter.marseille/" className="hover:text-gray-300" target="_blank" rel="noopener noreferrer">
+              <a 
+                href="https://www.instagram.com/clubcenter.marseille/" 
+                className="hover:text-gray-300" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 <Instagram size={24} />
               </a>
-              <a href="#" className="hover:text-gray-300">
-                <X size={24} />
+              <a 
+                href="https://x.com/" 
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <XLogo size={24} />
+              </a>
+              <a 
+                href="https://www.tiktok.com/signup/phone-or-email/phone" 
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TikTokLogo size={24} />
+              </a>
+              <a 
+                href="https://www.linkedin.com/company/clubcenter/" 
+                className="hover:text-gray-300"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Linkedin size={24} />
               </a>
             </div>
           </div>

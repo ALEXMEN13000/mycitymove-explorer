@@ -75,7 +75,7 @@ export function CategoryModal({ category, isOpen, onClose }: CategoryModalProps)
             {currentSubcategories.map((sub) => (
               <Link
                 key={sub.id}
-                to={`/activities?category=${category}&subcategory=${sub.id}`}
+                to={`/activities?subcategory=${sub.name.toLowerCase()}`}
                 className="bg-gray-50 hover:bg-gray-100 transition-colors rounded-xl p-4 text-[#102A43]"
                 onClick={onClose}
               >

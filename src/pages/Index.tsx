@@ -2,41 +2,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
 import { CategoryGrid } from "@/components/CategoryGrid";
-import { ActivityCard } from "@/components/ActivityCard";
+import { PopularActivities } from "@/components/PopularActivities";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
-// Sélection des activités populaires
-const popularActivities = [
-  {
-    title: "Séance de Yoga",
-    category: "Bien-être",
-    location: "Studio Zen Marseille",
-    imageUrl: "https://images.unsplash.com/photo-1599447421416-3414500d18a5",
-    clubName: "Studio Zen",
-    clubLogo: "https://images.unsplash.com/photo-1545389336-cf090694435e?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.9
-  },
-  {
-    title: "Cours de Tennis",
-    category: "Sport",
-    location: "Tennis Club Marseille",
-    imageUrl: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6",
-    clubName: "Tennis Club Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.8
-  },
-  {
-    title: "Cours de Théâtre",
-    category: "Art",
-    location: "Théâtre National de Marseille",
-    imageUrl: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf",
-    clubName: "Théâtre National",
-    clubLogo: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.7
-  }
-];
 
 const Index = () => {
   return (
@@ -86,23 +55,7 @@ const Index = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center">
-              Activités populaires
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {popularActivities.map((activity, index) => (
-                <ActivityCard
-                  key={index}
-                  title={activity.title}
-                  category={activity.category}
-                  location={activity.location}
-                  imageUrl={activity.imageUrl}
-                  clubName={activity.clubName}
-                  clubLogo={activity.clubLogo}
-                  rating={activity.rating}
-                />
-              ))}
-            </div>
+            <PopularActivities />
           </section>
         </div>
       </main>

@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect, useRef } from 'react'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { XLogo } from "./icons/XLogo";
+import { TikTokLogo } from "./icons/TikTokLogo";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -49,6 +51,48 @@ export function Header() {
           <Link to="/" className="text-xl font-bold text-white hover:text-gray-200">
             CLUBCENTER
           </Link>
+          <div className="hidden md:flex items-center gap-4 ml-6">
+            <a 
+              href="https://www.facebook.com/r.php?locale=fr_FR" 
+              className="text-white hover:text-gray-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Facebook size={20} />
+            </a>
+            <a 
+              href="https://www.instagram.com/clubcenter.marseille/" 
+              className="text-white hover:text-gray-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Instagram size={20} />
+            </a>
+            <a 
+              href="https://x.com/" 
+              className="text-white hover:text-gray-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <XLogo size={20} />
+            </a>
+            <a 
+              href="https://www.tiktok.com/signup/phone-or-email/phone" 
+              className="text-white hover:text-gray-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <TikTokLogo size={20} />
+            </a>
+            <a 
+              href="https://www.linkedin.com/company/clubcenter/" 
+              className="text-white hover:text-gray-300"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Linkedin size={20} />
+            </a>
+          </div>
         </div>
 
         {/* Navigation desktop - absolument centrée */}

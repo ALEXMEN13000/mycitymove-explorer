@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { ActivityDetails } from '@/pages/ActivityDetails';
+import ActivityDetails from '@/pages/ActivityDetails';
 import { ActivityReviews } from '@/pages/ActivityReviews';
 import { Header } from '@/components/Header';
 
@@ -16,7 +16,6 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ClubLogin from "@/pages/ClubLogin";
 import ClubRegister from "@/pages/ClubRegister";
-import Clubs from "@/pages/Clubs";
 import ResetPassword from "@/pages/ResetPassword";
 import Favorites from "@/pages/Favorites";
 import Calendar from "@/pages/Calendar";
@@ -45,9 +44,8 @@ function App() {
                 {/* Routes publiques */}
                 <Route path="/" element={<Index />} />
                 <Route path="/activities" element={<Activities />} />
-                <Route path="/activity/:activityId" element={<ActivityDetails />} />
+                <Route path="/activity/:id" element={<ActivityDetails />} />
                 <Route path="/activity/:activityId/reviews" element={<ActivityReviews />} />
-                <Route path="/clubs" element={<Clubs />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/reset-password" element={<ResetPassword />} />

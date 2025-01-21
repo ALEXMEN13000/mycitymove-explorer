@@ -1,221 +1,12 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { SearchBar } from "@/components/SearchBar";
 import { ActivityCard } from "@/components/ActivityCard";
 import { ActivityFilters } from "@/components/ActivityFilters";
 import { useSearchParams } from "react-router-dom";
-
-const activities = [
-  {
-    title: "Cours de Tennis",
-    category: "Sport",
-    subcategory: "Tennis",
-    location: "Tennis Club Marseille",
-    district: "8ème arrondissement",
-    time: "10:00",
-    dayOfWeek: "Lundi",
-    imageUrl: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6",
-    clubName: "Tennis Club Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.8
-  },
-  {
-    title: "Cours de Piano",
-    category: "Musique",
-    subcategory: "Piano",
-    location: "Conservatoire de Marseille",
-    price: 35,
-    level: "Tous niveaux",
-    time: "14:00",
-    dayOfWeek: "Mardi",
-    imageUrl: "https://images.unsplash.com/photo-1552422535-c45813c61732",
-    clubName: "Conservatoire de Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.6
-  },
-  {
-    title: "Séance de Yoga",
-    category: "Bien-être",
-    subcategory: "Yoga",
-    location: "Studio Zen Marseille",
-    price: 20,
-    level: "Tous niveaux",
-    time: "09:00",
-    dayOfWeek: "Mercredi",
-    imageUrl: "https://images.unsplash.com/photo-1599447421416-3414500d18a5",
-    clubName: "Studio Zen",
-    clubLogo: "https://images.unsplash.com/photo-1545389336-cf090694435e?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.9
-  },
-  {
-    title: "Cours de Théâtre",
-    category: "Art",
-    subcategory: "Théâtre",
-    location: "Théâtre National de Marseille",
-    price: 30,
-    level: "Débutant",
-    time: "16:00",
-    dayOfWeek: "Jeudi",
-    imageUrl: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf",
-    clubName: "Théâtre National",
-    clubLogo: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.7
-  },
-  {
-    title: "Cours de Natation",
-    category: "Sport",
-    subcategory: "Natation",
-    location: "Piscine Municipale Marseille",
-    price: 15,
-    level: "Débutant",
-    time: "17:00",
-    dayOfWeek: "Lundi",
-    imageUrl: "https://images.unsplash.com/photo-1600965962361-9035dbfd1c50",
-    clubName: "Piscine Municipale",
-    clubLogo: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.5
-  },
-  {
-    title: "Cours de Guitare",
-    category: "Musique",
-    subcategory: "Guitare",
-    location: "École de Musique Marseille",
-    price: 30,
-    level: "Intermédiaire",
-    time: "18:00",
-    dayOfWeek: "Mardi",
-    imageUrl: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1",
-    clubName: "École de Musique Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.4
-  },
-  {
-    title: "Cours de Danse Classique",
-    category: "Danse",
-    subcategory: "Classique",
-    location: "Studio de Danse Marseille",
-    price: 28,
-    level: "Débutant",
-    time: "15:00",
-    dayOfWeek: "Mercredi",
-    imageUrl: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434",
-    clubName: "Studio de Danse Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.8
-  },
-  {
-    title: "Atelier Peinture",
-    category: "Art",
-    subcategory: "Peinture",
-    location: "Atelier des Arts Marseille",
-    price: 40,
-    level: "Tous niveaux",
-    time: "14:00",
-    dayOfWeek: "Samedi",
-    imageUrl: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b",
-    clubName: "Atelier des Arts Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.6
-  },
-  {
-    title: "Cours de Boxe",
-    category: "Sport",
-    subcategory: "Boxe",
-    location: "Club de Boxe Marseille",
-    price: 22,
-    level: "Débutant",
-    time: "19:00",
-    dayOfWeek: "Vendredi",
-    imageUrl: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed",
-    clubName: "Club de Boxe Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1509563268479-0f004cf3f58b?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.7
-  },
-  {
-    title: "Méditation Guidée",
-    category: "Bien-être",
-    subcategory: "Méditation",
-    location: "Centre Mindfulness Marseille",
-    price: 15,
-    level: "Tous niveaux",
-    time: "08:00",
-    dayOfWeek: "Dimanche",
-    imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773",
-    clubName: "Centre Mindfulness Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1528319725582-ddc096101511?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.9
-  },
-  {
-    title: "Cours de Football",
-    category: "Sport",
-    subcategory: "Football",
-    location: "Stade Vélodrome",
-    price: 18,
-    level: "Tous niveaux",
-    time: "16:00",
-    dayOfWeek: "Mercredi",
-    imageUrl: "https://images.unsplash.com/photo-1579952363873-27f3bade9f55",
-    clubName: "Stade Vélodrome",
-    clubLogo: "https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.8
-  },
-  {
-    title: "Atelier Photographie",
-    category: "Art",
-    subcategory: "Photographie",
-    location: "Studio Photo Marseille",
-    price: 45,
-    level: "Intermédiaire",
-    time: "10:00",
-    dayOfWeek: "Samedi",
-    imageUrl: "https://images.unsplash.com/photo-1452780212940-6f5c0d14d848",
-    clubName: "Studio Photo Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.5
-  },
-  {
-    title: "Cours de Violon",
-    category: "Musique",
-    subcategory: "Violon",
-    location: "Conservatoire de Marseille",
-    price: 40,
-    level: "Débutant",
-    time: "16:30",
-    dayOfWeek: "Jeudi",
-    imageUrl: "https://images.unsplash.com/photo-1612225330812-01a9c6b355ec",
-    clubName: "Conservatoire de Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.6
-  },
-  {
-    title: "Pilates",
-    category: "Bien-être",
-    subcategory: "Pilates",
-    location: "Centre Fitness Marseille",
-    price: 25,
-    level: "Tous niveaux",
-    time: "12:00",
-    dayOfWeek: "Mardi",
-    imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a",
-    clubName: "Centre Fitness Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.7
-  },
-  {
-    title: "Cours de Basketball",
-    category: "Sport",
-    subcategory: "Basketball",
-    location: "Palais des Sports Marseille",
-    price: 20,
-    level: "Débutant",
-    time: "17:30",
-    dayOfWeek: "Vendredi",
-    imageUrl: "https://images.unsplash.com/photo-1546519638-68e109498ffc",
-    clubName: "Palais des Sports Marseille",
-    clubLogo: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&h=100&fit=crop&auto=format&q=80",
-    rating: 4.6
-  }
-];
+import { toast, Toaster } from "react-hot-toast";
+import { activities } from "../data/activities";
 
 const marseille_districts = [
   "1er arrondissement",
@@ -257,85 +48,52 @@ const normalizeText = (text: string) => {
     .trim();
 };
 
+// Fonction pour calculer la distance entre deux points GPS en km
+const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const R = 6371; // Rayon de la Terre en km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; // Distance en km
+};
+
+// Fonction pour calculer la distance réelle en utilisant Google Maps Distance Matrix API
+const calculateRealDistance = async (origin: { lat: number; lng: number }, destination: { lat: number; lng: number }): Promise<number> => {
+  try {
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origin.lat},${origin.lng}&destinations=${destination.lat},${destination.lng}&mode=walking&key=${process.env.VITE_GOOGLE_MAPS_API_KEY}`
+    );
+    const data = await response.json();
+    
+    if (data.rows[0].elements[0].status === 'OK') {
+      // La distance est retournée en mètres, on la convertit en kilomètres
+      return data.rows[0].elements[0].distance.value / 1000;
+    }
+    throw new Error('Impossible de calculer la distance');
+  } catch (error) {
+    console.error('Erreur lors du calcul de la distance:', error);
+    // En cas d'erreur, on utilise la distance à vol d'oiseau comme fallback
+    return calculateDistance(origin.lat, origin.lng, destination.lat, destination.lng);
+  }
+};
+
 const Activities = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [filteredActivities, setFilteredActivities] = useState(activities);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sortOrder, setSortOrder] = useState("best");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [filters, setFilters] = useState({
-    club: "",
-    time: "",
-    dayOfWeek: "",
-    district: "",
+    club: 'all',
+    district: 'all',
+    age: 'all',
+    level: 'all',
+    time: 'all',
+    dayOfWeek: 'all',
+    distance: 'all'
   });
-
-  useEffect(() => {
-    const category = searchParams.get("category");
-    const subcategory = searchParams.get("subcategory");
-    const search = searchParams.get("search");
-
-    let result = [...activities];
-
-    // Appliquer les filtres de catégorie et sous-catégorie depuis l'URL
-    if (category) {
-      result = result.filter(activity => {
-        // Gérer les cas spéciaux comme "bien-être"
-        const normalizedCategory = activity.category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const normalizedParam = category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return normalizedCategory === normalizedParam;
-      });
-    }
-    if (subcategory) {
-      result = result.filter(activity => {
-        const normalizedSubcategory = activity.subcategory.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const normalizedParam = subcategory.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return normalizedSubcategory === normalizedParam;
-      });
-    }
-
-    // Appliquer les autres filtres
-    if (filters.club && filters.club !== "all") {
-      result = result.filter(activity => activity.clubName === filters.club);
-    }
-    if (filters.dayOfWeek && filters.dayOfWeek !== "all") {
-      result = result.filter(activity => activity.dayOfWeek === filters.dayOfWeek);
-    }
-    if (filters.time && filters.time !== "all") {
-      result = result.filter(activity => activity.time === filters.time);
-    }
-    if (filters.district && filters.district !== "all") {
-      result = result.filter(activity => activity.district === filters.district);
-    }
-
-    // Appliquer la recherche
-    if (search) {
-      setSearchQuery(search);
-      const terms = normalizeText(search).split(" ");
-      result = result.filter(activity => matchesSearchTerms(activity, terms));
-    } else if (searchQuery) {
-      const terms = normalizeText(searchQuery).split(" ");
-      result = result.filter(activity => matchesSearchTerms(activity, terms));
-    }
-
-    // Appliquer le tri par note
-    result.sort((a, b) => {
-      if (sortOrder === "best") {
-        return b.rating - a.rating;
-      } else {
-        return a.rating - b.rating;
-      }
-    });
-
-    setFilteredActivities(result);
-  }, [filters, searchQuery, sortOrder, searchParams]);
-
-  const handleFiltersChange = (newFilters: any) => {
-    setFilters(newFilters);
-  };
-
-  const handleSortChange = (order: string) => {
-    setSortOrder(order);
-  };
 
   const matchesSearchTerms = (activity: any, searchTerms: string[]) => {
     const activityText = normalizeText(`${activity.title} ${activity.category} ${activity.subcategory} ${activity.location}`);
@@ -352,55 +110,180 @@ const Activities = () => {
     return searchTerms.every(term => activityText.includes(term));
   };
 
+  const matchesFilters = async (activity: any, filters: any) => {
+    // Vérifier la distance en premier si le filtre de distance est actif
+    if (filters.distance !== 'all' && userLocation && activity.coordinates) {
+      try {
+        const distance = calculateDistance(
+          userLocation.lat,
+          userLocation.lng,
+          activity.coordinates.lat,
+          activity.coordinates.lng
+        );
+        const maxDistance = parseFloat(filters.distance);
+        if (distance > maxDistance) {
+          return false;
+        }
+      } catch (error) {
+        console.error('Erreur lors du calcul de la distance pour', activity.title, ':', error);
+        return false;
+      }
+    }
+
+    // Vérifier le filtre de club
+    if (filters.club !== 'all' && activity.clubName !== filters.club) {
+      return false;
+    }
+
+    // Vérifier les autres filtres
+    if (filters.district !== 'all' && activity.district !== filters.district) {
+      return false;
+    }
+
+    if (filters.level !== 'all' && activity.level !== filters.level) {
+      return false;
+    }
+
+    if (filters.dayOfWeek !== 'all' && activity.dayOfWeek !== filters.dayOfWeek) {
+      return false;
+    }
+
+    if (filters.time !== 'all') {
+      const activityStartHour = parseInt(activity.startTime.split(':')[0]);
+      switch (filters.time) {
+        case 'Matin (6h-12h)':
+          if (activityStartHour < 6 || activityStartHour >= 12) return false;
+          break;
+        case 'Midi (12h-14h)':
+          if (activityStartHour < 12 || activityStartHour >= 14) return false;
+          break;
+        case 'Après-midi (14h-18h)':
+          if (activityStartHour < 14 || activityStartHour >= 18) return false;
+          break;
+        case 'Soir (18h-22h)':
+          if (activityStartHour < 18 || activityStartHour >= 22) return false;
+          break;
+      }
+    }
+
+    return true;
+  };
+
+  // Fonction pour appliquer les filtres et le tri
+  const applyFiltersAndSort = async (currentFilters: any, sortOrder: string, searchQuery: string) => {
+    let filtered = [...activities];
+
+    // Appliquer la recherche si elle existe
+    if (searchQuery) {
+      const searchTerms = normalizeText(searchQuery).split(' ');
+      filtered = filtered.filter(activity => matchesSearchTerms(activity, searchTerms));
+    }
+
+    // Appliquer les filtres de manière asynchrone
+    const filteredPromises = filtered.map(activity => matchesFilters(activity, currentFilters));
+    const filterResults = await Promise.all(filteredPromises);
+    filtered = filtered.filter((_, index) => filterResults[index]);
+
+    // Si la localisation est activée, calculer les distances pour toutes les activités
+    if (userLocation) {
+      const activitiesWithDistance = await Promise.all(
+        filtered.map(async (activity) => {
+          const distance = await calculateRealDistance(userLocation, activity.coordinates);
+          return { ...activity, distance };
+        })
+      );
+      
+      // Trier par distance si la localisation est activée
+      filtered = activitiesWithDistance.sort((a, b) => a.distance - b.distance);
+    } else {
+      // Sinon, appliquer le tri par note
+      filtered.sort((a, b) => {
+        if (sortOrder === 'best') {
+          return b.rating - a.rating;
+        } else {
+          return a.rating - b.rating;
+        }
+      });
+    }
+
+    console.log('Nombre d\'activités après filtrage:', filtered.length);
+    setFilteredActivities(filtered);
+  };
+
+  // Gestionnaire de mise à jour de la localisation
+  const handleLocationUpdate = async () => {
+    const fixedLocation = {
+      lat: 43.2988,
+      lng: 5.3789
+    };
+    
+    console.log('Mise à jour de la localisation:', fixedLocation);
+    setUserLocation(fixedLocation);
+    
+    // Réappliquer les filtres et le tri par distance
+    await applyFiltersAndSort(filters, searchParams.get('sort') || 'best', searchParams.get('q') || '');
+    
+    return fixedLocation;
+  };
+
+  // Gestionnaire de changement des filtres
+  const handleFiltersChange = async (newFilters: any) => {
+    console.log('Application des nouveaux filtres:', newFilters);
+    console.log('Localisation actuelle:', userLocation);
+    
+    setFilters(newFilters);
+    
+    let filtered = [...activities];
+    
+    // Appliquer les filtres de manière asynchrone
+    const filteredPromises = filtered.map(activity => matchesFilters(activity, newFilters));
+    const filterResults = await Promise.all(filteredPromises);
+    filtered = filtered.filter((_, index) => filterResults[index]);
+    
+    console.log('Nombre d\'activités après filtrage:', filtered.length);
+    setFilteredActivities(filtered);
+  };
+
+  // Gestionnaire de changement du tri
+  const handleSortChange = (order: string) => {
+    setSearchParams(prev => {
+      prev.set('sort', order);
+      return prev;
+    });
+    applyFiltersAndSort(filters, order, searchParams.get('q') || '');
+  };
+
+  // Effet pour appliquer les filtres initiaux et la recherche
+  useEffect(() => {
+    const searchQuery = searchParams.get('q') || '';
+    const sortOrder = searchParams.get('sort') || 'best';
+    applyFiltersAndSort(filters, sortOrder, searchQuery);
+  }, [searchParams]);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 pt-20 pb-12">
-        <div className="max-w-3xl mx-auto mb-8">
-          <h1 className="text-3xl font-bold text-center mb-6">
-            Découvrez toutes nos activités
-          </h1>
-          <SearchBar 
-            initialValue={searchQuery}
-            onSearch={(value) => setSearchQuery(value)}
+      <main className="flex-grow container mx-auto px-4 pt-24 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-[300px,1fr] gap-8">
+          <ActivityFilters
+            onFiltersChange={handleFiltersChange}
+            onSortChange={handleSortChange}
+            onLocationUpdate={handleLocationUpdate}
           />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filtres */}
-          <div className="lg:col-span-1">
-            <ActivityFilters
-              onFiltersChange={handleFiltersChange}
-              onSortChange={handleSortChange}
-            />
-          </div>
-
-          {/* Liste des activités */}
-          <div className="lg:col-span-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredActivities.map((activity, index) => (
+          <div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredActivities.map((activity) => (
                 <ActivityCard
-                  key={index}
-                  title={activity.title}
-                  category={activity.category}
-                  location={activity.location}
-                  imageUrl={activity.imageUrl}
-                  clubName={activity.clubName}
-                  clubLogo={activity.clubLogo}
-                  rating={activity.rating}
+                  key={activity.id}
+                  {...activity}
                 />
               ))}
             </div>
-            {filteredActivities.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">
-                  Aucune activité ne correspond à vos critères
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </main>
+      <Footer />
+      <Toaster position="bottom-right" />
     </div>
   );
 };
