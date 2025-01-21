@@ -27,8 +27,8 @@ import { PrivateRoute } from "@/components/auth/PrivateRoute";
 
 const queryClient = new QueryClient();
 
-// Définir le basename en fonction de l'environnement
-const basename = import.meta.env.DEV ? '/' : '/';
+// Définir le basename pour GitHub Pages
+const basename = '/mycitymove-explorer3/';
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Router basename={basename}>
+          <Router>
             <div className="min-h-screen bg-background">
               <Header />
               <Routes>
