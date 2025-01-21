@@ -5,7 +5,7 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/mycitymove-explorer-web/',
+  base: '/mycitymove-explorer/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
